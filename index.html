@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="root">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>RootStack Leads</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+    <!-- Personal Styles -->
+    <link rel="stylesheet" href="styles/style.css">
+</head>
+<body ng-controller="rootCtrl">
+    <!-- Navbar -->
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container-fluid">
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <!-- <a class="navbar-brand pull-left" href="#"><i class="fas fa-search"></i></a> -->
+          </div>
+        
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li class="pull-left" id="menu-toggle"><a href="#"><i class="fas fa-stream icon-nav"></i></a></li>
+                <li class="pull-left"><a href="#"><i class="fas fa-search icon-nav"></i></a></li>
+                <li><a href="#"><i class="fas fa-th icon-nav"></i></a></li>
+                <li class="social pull-right">
+                  <a href="#" class="dropdown-toggle" id="userName" data-toggle="dropdown"><b>Hello, Shaun Clark</b> <i class="fas fa-chevron-down"></i></a>
+                  <ul class="dropdown-menu" aria-labelledby="userName">
+                      <li><a href="#">Link</a></li>
+                      <li><a href="#">Link</a></li>
+                      <li><a href="#">Link</a></li>
+                  </ul>
+                </li>
+                <li class="social pull-right"><a href="#"><i class="fas fa-envelope-open icon-nav"></i> <span class="badge bg-root badge-float">1</span></a></li>
+            </ul>
+          </div>
+        </div>
+    </nav>
+
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <div class="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li><a href="#"><i class="fas fa-home"></i> HOME</a></li>
+                <li class="active"><a href="#"><i class="fas fa-user-circle"></i> LEADS</a></li>
+                <li><a href="#"><i class="fas fa-check-square"></i> TASKS</a></li>
+                <li><a href="#"><i class="fas fa-object-ungroup"></i> FORMS</a></li>
+                <li><a href="#"><i class="fas fa-user-plus"></i> REFFERALS</a></li>
+                <li><a href="#"><i class="fas fa-tasks"></i> CHECKLISTS</a></li>
+                <li><a href="#"><i class="fas fa-calendar-alt"></i> CALENDAR</a></li>
+                <li><a href="#"><i class="fas fa-cog"></i> SETTINGS</a></li>
+            </ul>
+        </div>
+    
+        <!-- Content -->
+        <div class="page-content-wrapper">
+            <div class="container pt-20 container-content">
+                <!-- Pre-Table -->
+                <!-- <div class="row"> -->
+                    <div class="col-md-12 col-sm-12 leads-nav">
+                        <div class="col-md-6 col-sm-5 no-pl-768">
+                            <div class="col-md-6 col-sm-7 col-xs-10 no-pl-768">
+                                <h3 class="no-mv">Leads <br> 
+                                    <small>Showing  
+                                        <a href="#" class="dropdown-toggle no-deco" id="itemsPerPage" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{itemsPerPage}} <i class="fas fa-chevron-down"></i></a>
+                                        <ul class="dropdown-menu menu-numbers" aria-labelledby="itemsPerPage">
+                                            <li ng-repeat="number in itemsPerPageList" ng-click="setItemsPerPage(number)"><a>{{number}}</a></li>
+                                        </ul>
+                                         out {{data.length}} contacts
+                                    </small>
+                                </h3>
+                            </div>
+                            <div class="col-md-2 col-sm-2 col-xs-2">
+                                <i class="fas fa-search search-icon"></i>
+                            </div>
+                        </div>
+        
+                        <div class="col-md-6 col-sm-7 col-xs-12 right-content-leads">
+                            <div class="col-md-3 col-md-offset-1 col-sm-4 col-sm-offset-0 col-xs-6 no-mv leads-p filters-med">
+                                <a class="dropdown-toggle no-deco" id="statusOrder" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{statusSearch == undefined || statusSearch == '' ? 'Status' : statusSearch}} <i class="fas fa-chevron-down"></i></a>
+                                <ul class="dropdown-menu" aria-labelledby="statusOrder">
+                                    <li ng-repeat="status in statusList" ng-click="setStringForOrder(status)"><a>{{status}}</a></li>
+                                </ul>
+                                <!-- <i class="fas fa-trash clear-filter" ng-click="clearFilter()" ng-show="filtering"></i> -->
+                            </div>
+                            <div class="col-md-4 col-sm-4 col-xs-6 no-mv leads-p filters-med">
+                                <a class="dropdown-toggle no-deco" id="sourceOrder" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{sourceSearch == undefined || sourceSearch == '' ? 'Source' : sourceSearch}} <i class="fas fa-chevron-down"></i></a>
+                                <ul class="dropdown-menu" aria-labelledby="sourceOrder">
+                                    <li ng-repeat="source in sourceList" ng-click="setStringSouForOrder(source)"><a>{{source}}</a></li>
+                                </ul>
+                                <i class="fas fa-trash clear-filter" ng-click="clearFilter()" ng-show="filtering"></i>
+                            </div>
+                            <div class="col-md-4 col-sm-4 col-xs-12 add-button-med">
+                                <button class="btn btn-info btn-add-contact bg-root" data-toggle="modal" data-target="#modalAdd">+ ADD CONTACT</button>
+                            </div>
+                        </div>
+                    </div>
+                <!-- </div> -->
+        
+                <!-- Table -->
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <th>LEAD</th>
+                                    <th>EMAIL</th>
+                                    <th>PHONE</th>
+                                    <th>SOURCE</th>
+                                    <th></th>
+                                </thead>
+        
+                                <tbody>
+                                    <tr ng-repeat="lead in filteredItems | filter: stringToSearch track by $index">
+                                        <td>
+                                            <div class="row">
+                                                <div class="col-md-3 text-center">
+                                                    <img src="assets/user.png" class="user-pic" alt="User Img">
+                                                </div>
+                                                <div class="col-md-8 user-name-med">
+                                                    <h4 class="user-name d-inline"><span ng-hide="editing && id==$index">{{lead.name}}</span>
+                                                    <div class="form-group mb-8" ng-show="editing && id==$index">
+                                                        <input type="text" class="form-control inline-edit-email" ng-model="lead.name">
+                                                    </div> <br ng-hide="editing && id==$index">
+                                                        <small ng-show="editing && id==$index" class="mt-8">Case: 
+                                                            <select class="form-control inline-edit-case" ng-model="lead.case" ng-options="case for case in caseList">
+                                                            </select>
+                                                        </small>
+                                                        <small ng-hide="editing && id==$index">Case: {{lead.case}}</small>
+                                                    </h4>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <h5 ng-hide="editing && id==$index" style="overflow-wrap: break-word">{{lead.email}}</h5>
+                                            <div class="form-group" ng-show="editing && id==$index">
+                                                <input type="text" class="form-control inline-edit-email" ng-model="lead.email">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <h5 ng-hide="editing && id==$index">{{lead.phone}}</h5>
+                                            <div class="form-group" ng-show="editing && id==$index">
+                                                <input type="text" class="form-control inline-edit-phone" ng-model="lead.phone">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="dropdown mt-8">
+                                                <a href="#" class="dropdown-toggle" id="sourceD" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><b>{{lead.source}}</b> <i class="fas fa-chevron-down"></i></a>
+                                                <ul class="dropdown-menu" aria-labelledby="sourceD">
+                                                    <li ng-repeat="source in sourceList" ng-click="editSource($parent.$index, source)"><a>{{source}}</a></li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                        <td class="actions">
+                                            <!-- <div class="row"> -->
+                                                <div class="col-md-7 col-sm-8 col-xs-12 mt-8 text-center">
+                                                    <div class="dropdown">
+                                                        <a href="#" class="dropdown-toggle toggle-status" id="statusD" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                                            <i class="fas fa-circle color-green-root"></i>&nbsp;&nbsp; {{lead.status}} <i class="fas fa-chevron-down"></i>
+                                                        </a>
+                                                        <ul class="dropdown-menu" aria-labelledby="statusD">
+                                                            <li ng-repeat="status in statusList" ng-click="editStatus($parent.$index, status)"><a>{{status}}</a></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-5 col-sm-4 col-xs-12 mt-8 content-edit-options">
+                                                    <div class="dropdown" ng-hide="editing && id==$index">
+                                                        <i class="fas fa-ellipsis-h icon-options dropdown-toggle" id="optionsD" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></i>
+                                                        <ul class="dropdown-menu edit-options" aria-labelledby="optionsD">
+                                                            <li><a ng-click="checkInputs($index)">Edit</a></li>
+                                                            <li><a ng-click="deleteLead($index)">Delete</a></li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="btn-group" ng-show="editing && id==$index">
+                                                        <button class="btn btn-success" ng-click="editLead($index)"><i class="fas fa-check"></i></button>
+                                                        <button class="btn btn-danger" ng-click="checkInputs()"><i class="fas fa-times"></i></button>
+                                                    </div>
+                                                </div>
+                                            <!-- </div> -->
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <!-- Pagination -->
+                            <div class="col-md-12 text-center">
+                                <div data-pagination="" data-num-pages="numOfPages()" data-current-page="currPage" data-max-size="maxSize" data-boundary-links="true"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for add new user -->
+    <div class="modal fade" tabindex="-1" role="dialog" id="modalAdd">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Add new user</h4>
+                </div>
+                <div class="modal-body">
+                    <form name="newUserForm">
+                        <div class="form-group">
+                            <label class="label-modal">Full Name:</label>
+                            <input type="text" name="name" class="form-control" ng-model="newName" placeholder="Introduce your name" required>
+                            <div class="alert alert-danger custom-alert" ng-show="newUserForm.name.$touched && newUserForm.name.$invalid">Full name is required.</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="label-modal">Email:</label>
+                            <input type="email" name="email" class="form-control" ng-model="newEmail" placeholder="Introduce your email" required>
+                            <div class="alert alert-danger custom-alert" ng-show="newUserForm.email.$touched && newUserForm.email.$invalid">Email is required and must be valid.</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="label-modal">Phone:</label>
+                            <input type="text" name="phone" class="form-control" ng-model="newPhone" placeholder="Introduce your phone" required>
+                            <div class="alert alert-danger custom-alert" ng-show="newUserForm.phone.$touched && newUserForm.phone.$invalid">Phone is required.</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="label-modal">Source:</label>
+                            <select class="form-control" name="source" ng-model="newSource" required>
+                                <option value="Internet Search">Internet Search</option>
+                                <option value="Facebook">Facebook</option>
+                                <option value="Referral">Referal</option>
+                            </select>
+                            <div class="alert alert-danger custom-alert" ng-show="newUserForm.source.$touched && newUserForm.source.$invalid">The source is required.</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="label-modal">Status:</label>
+                            <select class="form-control" name="status" ng-model="newStatus" required>
+                                <option value="Lead">Lead</option>
+                                <option value="Client">Client</option>
+                                <option value="Prospect">Prospect</option>
+                            </select>
+                            <div class="alert alert-danger custom-alert" ng-show="newUserForm.status.$touched && newUserForm.status.$invalid">The status is required.</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="label-modal">Case:</label>
+                            <select class="form-control" name="case" ng-model="newCase" required>
+                                <option value="Divorce">Divorce</option>
+                                <option value="Fraud">Fraud</option>
+                                <option value="DUI">DUI</option>
+                                <option value="Tax Evasion">Tax Evasion</option>
+                                <option value="Assault">Assault</option>
+                            </select>
+                            <div class="alert alert-danger custom-alert" ng-show="newUserForm.case.$touched && newUserForm.case.$invalid">The case is required.</div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" ng-click="addNew()" data-dismiss="modal"
+                    ng-disabled="newUserForm.name.$invalid || newUserForm.email.$invalid || newUserForm.phone.$invalid || newUserForm.source.$invalid ||
+                    newUserForm.status.$invalid || newUserForm.case.$invalid">Save User</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+
+    <!-- Scripts -->
+    <!-- JQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!-- Angular JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular.min.js"></script>
+    <!-- Angular Bootstrap -->
+    <script src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.3.0.min.js"></script>
+    <!-- Controller -->
+    <script src="scripts/app.js"></script>
+    <!-- Personal Script -->
+    <script src="scripts/scripts.js"></script>
+</body>
+</html>
